@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 손안의 쇼핑몰 - GCP Store</title>
+    <style>
+        /* 기본 스타일 세팅 */
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; }
+
+        /* 헤더 스타일 */
+        header { background-color: #fff; border-bottom: 1px solid #ddd; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: bold; color: #3498db; }
+        .nav ul { display: flex; gap: 20px; }
+        .nav a:hover { color: #3498db; }
+
+        /* 메인 배너 스타일 */
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: 48px; margin-bottom: 10px; }
+        .hero p { font-size: 18px; opacity: 0.9; }
+
+        /* 상품 리스트 스타일 */
+        .product-section { padding: 50px; }
+        .product-section h2 { text-align: center; margin-bottom: 40px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .product-card { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { height: 200px; background-color: #e0e0e0; display: flex; justify-content: center; align-items: center; color: #888; }
+        .product-info { padding: 20px; }
+        .product-name { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .product-price { color: #e74c3c; font-size: 16px; font-weight: bold; }
+
+        /* 푸터 스타일 */
+        footer { background-color: #333; color: white; text-align: center; padding: 30px; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">GCP Store</div>
+        <nav class="nav">
+            <ul>
+                <li><a href="#">홈</a></li>
+                <li><a href="#">베스트</a></li>
+                <li><a href="#">신상품</a></li>
+                <li><a href="#">마이페이지</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>OPEN SPECIAL!</h1>
+        <p>구글 클라우드 서버 오픈 기념 전품목 할인 이벤트</p>
+    </section>
+
+    <main class="product-section">
+        <h2>이달의 추천 상품</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-img">상품 이미지 1</div>
+                <div class="product-info">
+                    <div class="product-name">멋진 클라우드 티셔츠</div>
+                    <div class="product-price">25,000원</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">상품 이미지 2</div>
+                <div class="product-info">
+                    <div class="product-name">개발자용 기계식 키보드</div>
+                    <div class="product-price">120,000원</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">상품 이미지 3</div>
+                <div class="product-info">
+                    <div class="product-name">서버용 초고속 SSD</div>
+                    <div class="product-price">89,000원</div>
+                </div>
+            </div>
+             <div class="product-card">
+                <div class="product-img">상품 이미지 4</div>
+                <div class="product-info">
+                    <div class="product-name">구글 로고 머그컵</div>
+                    <div class="product-price">15,000원</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GCP Store. All rights reserved.</p>
+        <p>이 웹사이트는 구글 클라우드 데비안 서버에서 구동중입니다.</p>
+    </footer>
+
+</body>
+</html>

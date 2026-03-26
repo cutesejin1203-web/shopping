@@ -1,0 +1,55 @@
+# [공통 설정]
+spring:
+  application:
+    name: shopping
+  profiles:
+    active: prod
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true # 1. SQL 콘솔 출력 활성화
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true # 2. SQL을 보기 좋게 정렬
+        use_sql_comments: true # 3. SQL에 주석 추가 (어떤 메서드인지 확인용)
+
+# 🚀 [핵심 추가] 파라미터 바인딩 값을 보기 위한 로깅 설정
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace # 4. [Hibernate 6/SpringBoot 3.x 기준] 파라미터(?) 값 출력
+      # 만약 스프링부트 2.x 버전이라면 아래 주석을 풀고 위 bind를 주석처리해!
+      # type:
+      #   descriptor:
+      #     sql:
+      #       BasicBinder: trace
+
+# [보안 설정]
+jwt:
+  secret: ${JWT_SECRET} # 💡 구멍 뚫기!
+
+# [포트원 결제 설정]
+portone:
+  api:
+    key: ${PORTONE_API_KEY}
+    secret: ${PORTONE_API_SECRET}
+
+---
+# [Prod 환경]
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://34.60.156.156:5432/shopping_db
+    username: admin
+    password: ${DB_PASSWORD} # 💡 구멍 뚫기!
+    driver-class-name: org.postgresql.Driver
+gcp:
+  bucket:
+    name: shopping-store-bucket

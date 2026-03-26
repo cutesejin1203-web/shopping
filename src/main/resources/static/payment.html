@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PortOne Payment</title>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+</head>
+<body>
+    <h1>PortOne Payment Test</h1>
+    <button onclick="requestPay()">Pay Now</button>
+
+    <script>
+        const IMP = window.IMP;
+        IMP.init("imp10391932"); // Replace with your PortOne merchant ID
+
+        async function requestPay() {
+            // 1. Create Order
+            const response = await fetch('/api/orders/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    memberId: 'test_user',
+                    orderName: 'Sample Product',
+                    totalAmount: 1000
+                })
+            });
+            const order = await response.json();
+
+            // 2. Request Payment
+            IMP.request_pay({
+                pg: "html5_inicis",
+                pay_method: "card",
+                merchant_uid: order.merchantUid,
+                name: order.orderName,
+                amount: order.amount,
+                buyer_email: "test@example.com",
+                buyer_name: "Test User",
+                buyer_tel: "010-1234-5678",
+                buyer_addr: "Seoul, Korea",
+                buyer_postcode: "123-456"
+            }, async function (rsp) {
+                if (rsp.success) {
+                    // 3. Verify Payment
+                    const verifyResponse = await fetch(`/api/payments/verify/${rsp.imp_uid}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ merchant_uid: rsp.merchant_uid })
+                    });
+                    const result = await verifyResponse.json();
+
+                    if (result.status === 'success') {
+                        alert('Payment successful!');
+                    } else {
+                        alert(`Payment failed: ${result.message}`);
+                    }
+                } else {
+                    alert("Payment failed: " + rsp.error_msg);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
