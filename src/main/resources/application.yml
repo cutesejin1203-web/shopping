@@ -53,3 +53,5 @@ spring:
 gcp:
   bucket:
     name: shopping-store-bucket
+  credentials:
+    base64: ${GCP_KEY_JSON}

@@ -2,6 +2,8 @@ package com.shopping.order.vo;
 
 import lombok.*;
 
+import java.util.List;
+
 public class OrderVO {
 
     // 1. 프론트 -> 백엔드: 사전 주문 생성 요청
@@ -25,5 +27,25 @@ public class OrderVO {
     public static class VerifyRequest {
         private String impUid;      // 포트원 결제 고유번호
         private String merchantUid; // 우리 서버 주문번호
+    }
+
+    // 🚀 [추가] 4. 프론트엔드 주문 내역 화면용 응답 DTO
+    @Getter @Builder
+    public static class HistoryResponse {
+        private Long orderId;
+        private String orderDate;   // 예: 2026. 03. 25
+        private String merchantUid; // 주문번호
+        private String status;      // 결제 상태 (PAID, READY 등)
+        private int totalAmount;
+        private List<OrderItemDto> items; // 그 주문에 속한 상품들
+    }
+
+    // 🚀 [추가] 5. 내역 안에 들어갈 개별 상품 DTO
+    @Getter @Builder
+    public static class OrderItemDto {
+        private String name;
+        private int price;
+        private int quantity;
+        private String imgUrl;
     }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -94,5 +95,37 @@ public class OrderServiceImpl implements OrderService {
     private int getAmountFromPortOneAPI(String impUid) {
         // 포트원 토큰 발급 -> 결제 단건 조회 API 호출 -> 응답받은 amount 반환
         return 50000; // 임시 리턴
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderVO.HistoryResponse> getOrderHistory(String email) {
+        // 1. 해당 유저의 모든 주문 내역을 최신순으로 조회
+        List<Order> orders = orderRepository.findByMemberEmailOrderByIdDesc(email);
+
+        // 2. Entity -> DTO 변환 (Stream 활용)
+        return orders.stream().map(order -> {
+
+            // 💡 [실무 팁] 원래는 order.getOrderItems() 루프 돌면서 매핑해야 함!
+            // 지금은 OrderItem 엔티티가 없으니 화면 깨지지 않게 임시 상품을 넣어줄게.
+            List<OrderVO.OrderItemDto> dummyItems = new java.util.ArrayList<>();
+            dummyItems.add(OrderVO.OrderItemDto.builder()
+                    .name("주문 상품 (상세 엔티티 연결 필요)")
+                    .price(order.getTotalAmount())
+                    .quantity(1)
+                    .imgUrl("/assets/no-image.png")
+                    .build());
+
+            return OrderVO.HistoryResponse.builder()
+                    .orderId(order.getId())
+                    // 실무에선 BaseTimeEntity의 getRegTime()을 포맷팅해서 써야 해!
+                    .orderDate("2026. 03. 26")
+                    .merchantUid(order.getMerchantUid())
+                    .status(order.getStatus().name())
+                    .totalAmount(order.getTotalAmount())
+                    .items(dummyItems)
+                    .build();
+
+        }).collect(java.util.stream.Collectors.toList());
     }
 }

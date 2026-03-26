@@ -36,31 +36,30 @@ jobs:
 
     - name: 🔄 6. GCP 서버에서 배포 스크립트 실행 및 환경변수 주입
       uses: appleboy/ssh-action@master
-      # 🚀 [추가] 1. 깃허브 금고에서 변수들을 꺼내서 Runner 환경에 올리기
       env:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         PORTONE_API_KEY: ${{ secrets.PORTONE_API_KEY }}
         PORTONE_API_SECRET: ${{ secrets.PORTONE_API_SECRET }}
+        # 🚀 1. 깃허브 금고에서 Base64 문자열 꺼내기
         GCP_KEY_JSON: ${{ secrets.GCP_KEY_JSON }}
       with:
         host: ${{ secrets.GCP_HOST }}
         username: ${{ secrets.GCP_USERNAME }}
         key: ${{ secrets.GCP_SSH_KEY }}
-        # 🚀 [추가] 2. SSH 접속할 때 이 변수들을 서버 안으로 같이 들고 들어가기!
+        # 🚀 2. SSH 접속할 때 서버로 같이 들고 들어가기
         envs: DB_PASSWORD, JWT_SECRET, PORTONE_API_KEY, PORTONE_API_SECRET, GCP_KEY_JSON
         script: |
           cd ~/app
           
-          # 🚀 [추가] 3. 들고 온 JSON 내용으로 서버에 gcp-key.json 파일 생성
-          echo "$GCP_KEY_JSON" > gcp-key.json
+          # 💡 [삭제] 더 이상 gcp-key.json 파일을 서버에 만들지 않음! (보안 최고)
           
-          # 🚀 [추가] 4. deploy.sh가 읽을 수 있도록 환경 변수 강제 주입(export)
+          # 🚀 3. deploy.sh가 읽을 수 있도록 메모리에 환경 변수 띄우기
           export DB_PASSWORD=$DB_PASSWORD
           export JWT_SECRET=$JWT_SECRET
           export PORTONE_API_KEY=$PORTONE_API_KEY
           export PORTONE_API_SECRET=$PORTONE_API_SECRET
-          export GCP_KEY_PATH=$(pwd)/gcp-key.json
+          export GCP_KEY_JSON=$GCP_KEY_JSON # 💡 application.yml의 구멍으로 쏙 들어감!
           
           # 기존 배포 스크립트 실행
           chmod +x deploy.sh
